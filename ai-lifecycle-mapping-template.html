@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lifecycle Mapping Template</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --light-blue: #e7f1ff;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            border-left: 4px solid var(--secondary);
+            padding-left: 10px;
+        }
+
+        .intro {
+            background-color: var(--light-blue);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .lifecycle-phase {
+            background-color: #fff;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .phase-header h2 {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .phase-icon {
+            background-color: var(--secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .collapsible-content {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .input-group input, .input-group select {
+            flex: 1;
+        }
+
+        .risk-assessment {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .risk-label {
+            flex: 1;
+        }
+
+        .risk-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .risk-option {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .risk-option input {
+            margin-right: 5px;
+        }
+
+        .sub-section {
+            background-color: var(--light-gray);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+        }
+
+        .sub-section h3 {
+            margin-top: 0;
+        }
+
+        .stakeholder-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stakeholder-row input {
+            flex: 1;
+        }
+
+        .add-button {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .remove-button {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: #2980b9;
+        }
+
+        .print-button {
+            background-color: var(--primary);
+        }
+
+        .save-button {
+            background-color: var(--success);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: var(--info);
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: var(--primary);
+            color: white;
+            text-align: left;
+            border-radius: 4px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip i {
+            font-style: normal;
+            border: 1px solid var(--info);
+            padding: 0px 6px;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        @media print {
+            .lifecycle-phase {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                border: 1px solid #ccc;
+                box-shadow: none;
+            }
+            
+            .button-row, .tooltip .tooltiptext, .phase-toggle {
+                display: none;
+            }
+            
+            body {
+                font-size: 12pt;
+            }
+            
+            h1 {
+                font-size: 18pt;
+            }
+            
+            h2 {
+                font-size: 16pt;
+            }
+            
+            h3 {
+                font-size: 14pt;
+            }
+            
+            .collapsible-content {
+                display: block !important;
+                max-height: none !important;
+            }
+        }
+
+        .collapsed .collapsible-content {
+            max-height: 0;
+        }
+
+        .phase-toggle {
+            font-size: 20px;
+            color: var(--secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .stakeholder-row {
+                flex-direction: column;
+                gap: 5px;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Lifecycle Mapping Template</h1>
+    
+    <div class="intro">
+        <p>This template will help you map out a simplified AI lifecycle for a specific use case in your organisation. By completing each section, you'll gain clarity on the key considerations for each phase of implementation, from initial design through development and deployment.</p>
+        <p><strong>Instructions:</strong> Fill in each section of the template for your AI initiative. You can expand or collapse sections by clicking on the section headers. Use the buttons at the bottom to save or print your completed template.</p>
+    </div>
+
+    <!-- Use Case Description -->
+    <div class="lifecycle-phase">
+        <div class="phase-header" onclick="toggleSection(this.parentNode)">
+            <div class="phase-icon">1</div>
+            <h2>Use Case Description</h2>
+            <button class="phase-toggle">▼</button>
+        </div>
+        <div class="collapsible-content">
+            <div class="form-group">
+                <label for="initiative-name">AI Initiative Name:</label>
+                <input type="text" id="initiative-name" placeholder="e.g., Customer Churn Prediction Model">
+            </div>
+            
+            <div class="form-group">
+                <label for="business-problem">Business Problem to Solve:
+                    <span class="tooltip"><i>i</i>
+                        <span class="tooltiptext">Clearly describe the specific business challenge or opportunity that this AI initiative will address. Be specific about the pain points or inefficiencies.</span>
+                    </span>
+                </label>
+                <textarea id="business-problem" placeholder="Describe the specific problem this AI initiative will solve..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="expected-impact">Expected Business Impact:
+                    <span class="tooltip"><i>i</i>
+                        <span class="tooltiptext">Outline the anticipated benefits of implementing this AI solution. Consider quantifiable metrics like cost reduction, revenue increase, time savings, or improved customer satisfaction.</span>
+                    </span>
+                </label>
+                <textarea id="expected-impact" placeholder="Describe the expected benefits and impact of this AI initiative..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Design Phase -->
+    <div class="lifecycle-phase">
+        <div class="phase-header" onclick="toggleSection(this.parentNode)">
+            <div class="phase-icon">2</div>
+            <h2>Design Phase</h2>
+            <button class="phase-toggle">▼</button>
+        </div>
+        <div class="collapsible-content">
+            <div class="sub-section">
+                <h3>Key Stakeholders
+                    <span class="tooltip"><i>i</i>
+                        <span class="tooltiptext">Identify all the people who need to be involved in the design phase. Include decision-makers, subject matter experts, end users, and any other stakeholders who should have input.</span>
+                    </span>
+                </h3>
+                <div id="design-stakeholders-container">
+                    <div class="stakeholder-row">
+                        <input type="text" placeholder="Role (e.g., Primary decision-maker)">
+                        <input type="text" placeholder="Name/Department">
+                    </div>
+                </div>
+                <button class="add-button" onclick="addStakeholderRow('design-stakeholders-container')">+ Add Stakeholder</button>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Potential Bottlenecks/Risks</h3>
+                <div class="risk-assessment">
+                    <div class="risk-label">Data availability:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="data-low" name="data-risk" value="low">
+                            <label for="data-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="data-medium" name="data-risk" value="medium">
+                            <label for="data-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="data-high" name="data-risk" value="high">
+                            <label for="data-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-assessment">
+                    <div class="risk-label">Problem definition clarity:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="problem-low" name="problem-risk" value="low">
+                            <label for="problem-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="problem-medium" name="problem-risk" value="medium">
+                            <label for="problem-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="problem-high" name="problem-risk" value="high">
+                            <label for="problem-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-assessment">
+                    <div class="risk-label">Stakeholder alignment:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="alignment-low" name="alignment-risk" value="low">
+                            <label for="alignment-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="alignment-medium" name="alignment-risk" value="medium">
+                            <label for="alignment-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="alignment-high" name="alignment-risk" value="high">
+                            <label for="alignment-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="other-design-risks">Other risks:</label>
+                    <input type="text" id="other-design-risks" placeholder="Describe any other design phase risks...">
+                </div>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Resource Requirements</h3>
+                
+                <div class="form-group">
+                    <label for="team-members">Team members needed:</label>
+                    <input type="text" id="team-members" placeholder="List required roles and expertise...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="data-sources">Data sources required:</label>
+                    <input type="text" id="data-sources" placeholder="List necessary data sources...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tools-platforms">Tools/platforms:</label>
+                    <input type="text" id="tools-platforms" placeholder="List required tools or platforms...">
+                </div>
+                
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="design-budget">Budget estimate:</label>
+                        <input type="text" id="design-budget" placeholder="£">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="design-timeline">Timeline estimate:</label>
+                        <input type="text" id="design-timeline" placeholder="e.g., 6 weeks">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="design-success">Success Metrics:
+                    <span class="tooltip"><i>i</i>
+                        <span class="tooltiptext">How will you determine if the design phase was successful? Consider metrics like stakeholder approval, clarity of requirements, or data readiness assessment.</span>
+                    </span>
+                </label>
+                <textarea id="design-success" placeholder="How will you measure success for the design phase?"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Develop Phase -->
+    <div class="lifecycle-phase">
+        <div class="phase-header" onclick="toggleSection(this.parentNode)">
+            <div class="phase-icon">3</div>
+            <h2>Develop Phase</h2>
+            <button class="phase-toggle">▼</button>
+        </div>
+        <div class="collapsible-content">
+            <div class="sub-section">
+                <h3>Key Stakeholders</h3>
+                <div id="develop-stakeholders-container">
+                    <div class="stakeholder-row">
+                        <input type="text" placeholder="Role (e.g., Technical lead)">
+                        <input type="text" placeholder="Name/Department">
+                    </div>
+                </div>
+                <button class="add-button" onclick="addStakeholderRow('develop-stakeholders-container')">+ Add Stakeholder</button>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Potential Bottlenecks/Risks</h3>
+                <div class="risk-assessment">
+                    <div class="risk-label">Technical complexity:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="technical-low" name="technical-risk" value="low">
+                            <label for="technical-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="technical-medium" name="technical-risk" value="medium">
+                            <label for="technical-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="technical-high" name="technical-risk" value="high">
+                            <label for="technical-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-assessment">
+                    <div class="risk-label">Data quality issues:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="quality-low" name="quality-risk" value="low">
+                            <label for="quality-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="quality-medium" name="quality-risk" value="medium">
+                            <label for="quality-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="quality-high" name="quality-risk" value="high">
+                            <label for="quality-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-assessment">
+                    <div class="risk-label">Skills availability:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="skills-low" name="skills-risk" value="low">
+                            <label for="skills-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="skills-medium" name="skills-risk" value="medium">
+                            <label for="skills-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="skills-high" name="skills-risk" value="high">
+                            <label for="skills-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="other-develop-risks">Other risks:</label>
+                    <input type="text" id="other-develop-risks" placeholder="Describe any other development phase risks...">
+                </div>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Resource Requirements</h3>
+                
+                <div class="form-group">
+                    <label for="dev-expertise">Development expertise needed:</label>
+                    <input type="text" id="dev-expertise" placeholder="List required technical skills...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="computing-resources">Computing resources:</label>
+                    <input type="text" id="computing-resources" placeholder="Describe necessary computing infrastructure...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="testing-environment">Testing environment:</label>
+                    <input type="text" id="testing-environment" placeholder="Describe testing requirements...">
+                </div>
+                
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="develop-budget">Budget estimate:</label>
+                        <input type="text" id="develop-budget" placeholder="£">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="develop-timeline">Timeline estimate:</label>
+                        <input type="text" id="develop-timeline" placeholder="e.g., 3 months">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="model-performance">Model performance targets:</label>
+                <input type="text" id="model-performance" placeholder="e.g., 95% accuracy, F1 score > 0.8...">
+            </div>
+            
+            <div class="form-group">
+                <label for="dev-milestones">Development milestones:</label>
+                <textarea id="dev-milestones" placeholder="List key milestones and deadlines..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="qa-metrics">Quality assurance metrics:</label>
+                <input type="text" id="qa-metrics" placeholder="e.g., Test coverage, code review standards...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Deploy Phase -->
+    <div class="lifecycle-phase">
+        <div class="phase-header" onclick="toggleSection(this.parentNode)">
+            <div class="phase-icon">4</div>
+            <h2>Deploy Phase</h2>
+            <button class="phase-toggle">▼</button>
+        </div>
+        <div class="collapsible-content">
+            <div class="sub-section">
+                <h3>Key Stakeholders</h3>
+                <div id="deploy-stakeholders-container">
+                    <div class="stakeholder-row">
+                        <input type="text" placeholder="Role (e.g., Implementation lead)">
+                        <input type="text" placeholder="Name/Department">
+                    </div>
+                </div>
+                <button class="add-button" onclick="addStakeholderRow('deploy-stakeholders-container')">+ Add Stakeholder</button>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Potential Bottlenecks/Risks</h3>
+                <div class="risk-assessment">
+                    <div class="risk-label">Integration challenges:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="integration-low" name="integration-risk" value="low">
+                            <label for="integration-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="integration-medium" name="integration-risk" value="medium">
+                            <label for="integration-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="integration-high" name="integration-risk" value="high">
+                            <label for="integration-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-assessment">
+                    <div class="risk-label">User adoption:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="adoption-low" name="adoption-risk" value="low">
+                            <label for="adoption-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="adoption-medium" name="adoption-risk" value="medium">
+                            <label for="adoption-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="adoption-high" name="adoption-risk" value="high">
+                            <label for="adoption-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-assessment">
+                    <div class="risk-label">Scalability issues:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="scalability-low" name="scalability-risk" value="low">
+                            <label for="scalability-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="scalability-medium" name="scalability-risk" value="medium">
+                            <label for="scalability-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="scalability-high" name="scalability-risk" value="high">
+                            <label for="scalability-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="risk-assessment">
+                    <div class="risk-label">Ethical/compliance concerns:</div>
+                    <div class="risk-options">
+                        <div class="risk-option">
+                            <input type="radio" id="ethical-low" name="ethical-risk" value="low">
+                            <label for="ethical-low">Low risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="ethical-medium" name="ethical-risk" value="medium">
+                            <label for="ethical-medium">Medium risk</label>
+                        </div>
+                        <div class="risk-option">
+                            <input type="radio" id="ethical-high" name="ethical-risk" value="high">
+                            <label for="ethical-high">High risk</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="other-deploy-risks">Other risks:</label>
+                    <input type="text" id="other-deploy-risks" placeholder="Describe any other deployment phase risks...">
+                </div>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Resource Requirements</h3>
+                
+                <div class="form-group">
+                    <label for="impl-expertise">Implementation expertise:</label>
+                    <input type="text" id="impl-expertise" placeholder="List required skills for deployment...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="infrastructure">Infrastructure needs:</label>
+                    <input type="text" id="infrastructure" placeholder="Describe production infrastructure requirements...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="training-req">Training requirements:</label>
+                    <input type="text" id="training-req" placeholder="Describe user training needs...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ongoing-support">Ongoing support:</label>
+                    <input type="text" id="ongoing-support" placeholder="Describe maintenance and support plans...">
+                </div>
+                
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="deploy-budget">Budget estimate:</label>
+                        <input type="text" id="deploy-budget" placeholder="£">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deploy-timeline">Timeline estimate:</label>
+                        <input type="text" id="deploy-timeline" placeholder="e.g., 6 weeks">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Success Metrics</h3>
+                
+                <div class="form-group">
+                    <label for="system-metrics">System performance metrics:</label>
+                    <input type="text" id="system-metrics" placeholder="e.g., Uptime, response time...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="adoption-metrics">User adoption metrics:</label>
+                    <input type="text" id="adoption-metrics" placeholder="e.g., Usage rates, user satisfaction...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="business-metrics">Business impact metrics:</label>
+                    <input type="text" id="business-metrics" placeholder="e.g., Cost reduction, revenue increase...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="roi-metrics">ROI measurements:</label>
+                    <input type="text" id="roi-metrics" placeholder="How will you calculate return on investment?">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Governance Considerations -->
+    <div class="lifecycle-phase">
+        <div class="phase-header" onclick="toggleSection(this.parentNode)">
+            <div class="phase-icon">5</div>
+            <h2>Governance Considerations</h2>
+            <button class="phase-toggle">▼</button>
+        </div>
+        <div class="collapsible-content">
+            <div class="form-group">
+                <label for="oversight">Oversight Mechanisms:
+                    <span class="tooltip"><i>i</i>
+                        <span class="tooltiptext">Describe how the project will be governed. Include information about who has ultimate accountability and how decisions will be made throughout the lifecycle.</span>
+                    </span>
+                </label>
+                <textarea id="oversight" placeholder="Describe governance approach..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="lifecycle-owner">Who will oversee the entire lifecycle?</label>
+                <input type="text" id="lifecycle-owner" placeholder="Name and role">
+            </div>
+            
+            <div class="form-group">
+                <label for="review-frequency">How frequently will progress be reviewed?</label>
+                <input type="text" id="review-frequency" placeholder="e.g., Weekly, bi-weekly...">
+            </div>
+            
+            <div class="form-group">
+                <label for="decision-points">Decision points for continuation/adjustment:</label>
+                <textarea id="decision-points" placeholder="List key decision points and criteria..."></textarea>
+            </div>
+            
+            <div class="sub-section">
+                <h3>Documentation Plans</h3>
+                
+                <div class="form-group">
+                    <label for="documentation-req">Key documentation requirements:</label>
+                    <textarea id="documentation-req" placeholder="List required documentation..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="doc-responsible">Responsible parties:</label>
+                    <input type="text" id="doc-responsible" placeholder="Who will create and maintain documentation?">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reflection Questions -->
+    <div class="lifecycle-phase">
+        <div class="phase-header" onclick="toggleSection(this.parentNode)">
+            <div class="phase-icon">6</div>
+            <h2>Reflection Questions</h2>
+            <button class="phase-toggle">▼</button>
+        </div>
+        <div class="collapsible-content">
+            <div class="form-group">
+                <label for="challenging-phase">1. Which phase of the AI lifecycle do you anticipate will be most challenging for your organisation and why?</label>
+                <textarea id="challenging-phase" placeholder="Your answer..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="missing-resources">2. What skills or resources are currently missing that would be critical for success?</label>
+                <textarea id="missing-resources" placeholder="Your answer..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="overall-success">3. How will you measure the overall success of this AI initiative?</label>
+                <textarea id="overall-success" placeholder="Your answer..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="next-steps">4. What are your next steps to move this initiative forward?</label>
+                <textarea id="next-steps" placeholder="Your answer..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-row">
+        <button class="action-button print-button" onclick="window.print()">Print / Save as PDF</button>
+        <button class="action-button" onclick="expandAll()">Expand All Sections</button>
+        <button class="action-button" onclick="collapseAll()">Collapse All Sections</button>
+        <button class="action-button save-button" onclick="saveTemplate()">Save Progress</button>
+    </div>
+
+    <script>
+        // Function to toggle section visibility
+        function toggleSection(section) {
+            section.classList.toggle('collapsed');
+            const button = section.querySelector('.phase-toggle');
+            if (section.classList.contains('collapsed')) {
+                button.textContent = '▶';
+            } else {
+                button.textContent = '▼';
+            }
+        }
+        
+        // Function to add a new stakeholder row
+        function addStakeholderRow(containerId) {
+            const container = document.getElementById(containerId);
+            const newRow = document.createElement('div');
+            newRow.className = 'stakeholder-row';
+            
+            const roleInput = document.createElement('input');
+            roleInput.type = 'text';
+            roleInput.placeholder = 'Role';
+            
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.placeholder = 'Name/Department';
+            
+            const removeButton = document.createElement('button');
+            removeButton.className = 'remove-button';
+            removeButton.textContent = 'X';
+            removeButton.onclick = function() {
+                container.removeChild(newRow);
+            };
+            
+            newRow.appendChild(roleInput);
+            newRow.appendChild(nameInput);
+            newRow.appendChild(removeButton);
+            
+            container.appendChild(newRow);
+        }
+        
+        // Function to expand all sections
+        function expandAll() {
+            document.querySelectorAll('.lifecycle-phase').forEach(section => {
+                if (section.classList.contains('collapsed')) {
+                    toggleSection(section);
+                }
+            });
+        }
+        
+        // Function to collapse all sections
+        function collapseAll() {
+            document.querySelectorAll('.lifecycle-phase').forEach(section => {
+                if (!section.classList.contains('collapsed')) {
+                    toggleSection(section);
+                }
+            });
+        }
+        
+        // Function to save template progress
+        function saveTemplate() {
+            // In a real implementation, this would save to a database or local storage
+            // For this demo, we'll just show an alert
+            alert('Your progress has been saved! In a real implementation, this would save your data to continue later.');
+        }
+        
+        // Initialize the template with all sections expanded
+        document.addEventListener('DOMContentLoaded', function() {
+            expandAll();
+        });
+    </script>
+</body>
+</html>
